@@ -1,0 +1,63 @@
+spring:
+  application:
+    name: vyapar-guru-app
+
+  datasource:
+    url: jdbc:postgresql://localhost:5432/postgres
+    username: ${DB_USERNAME:postgres}
+    password: ${DB_PASSWORD:postgres}
+    driver-class-name: org.postgresql.Driver
+    hikari:
+      maximum-pool-size: 10
+
+  jpa:
+    hibernate:
+      ddl-auto: update
+      default_schema: public
+    show-sql: true
+    properties:
+      hibernate.format_sql: true
+
+  profiles:
+    active: dev
+
+  liquibase:
+    change-log: classpath:changelog/changelog-master.xml
+    enabled: false
+
+server:
+  port: 8080
+
+logging:
+  level:
+    root: info
+    org.springframework: debug
+    liquibase: DEBUG
+  file:
+    name: logs/application.log
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*"
+  metrics:
+    export:
+      prometheus:
+        enabled: true
+
+security:
+  basic:
+    enabled: false
+
+---
+
+profiles:
+  dev:
+    logging:
+      level:
+        root: debug
+  prod:
+    logging:
+      level:
+        root: info
